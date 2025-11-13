@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Domain.Entites;
 
@@ -9,10 +7,11 @@ namespace Application.Contracts.Repositories
 {
     public interface IPollRepository
     {
-        Task<IEnumerable<Poll>> GetAll();
-        Task<Poll?> GetById(int id);
-        Task<Poll> Create(Poll poll);
-        Task<bool> Update(Poll poll);
-        Task<bool> Delete(int id);
+        Task<IEnumerable<Poll>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<Poll?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<Poll> CreateAsync(Poll poll, CancellationToken cancellationToken = default);
+        Task UpdateAsync(Poll poll, CancellationToken cancellationToken = default);
+        Task DeleteAsync(Poll poll, CancellationToken cancellationToken = default);
+        Task SaveAsync(CancellationToken cancellationToken = default);
     }
 }

@@ -7,5 +7,5 @@ using MediatR;
 
 namespace Application.Features.Polls.Commands.Update
 {
-    public record UpdateCommand(string Title, string Description) : IRequest<bool>;
+    public record UpdateCommand(int id , string Title, string Description) : IRequest<bool>;
 }

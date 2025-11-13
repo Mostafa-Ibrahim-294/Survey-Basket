@@ -8,5 +8,5 @@ using MediatR;
 
 namespace Application.Features.Polls.Queries.GetById
 {
-    public record GetByIdQuery(int Id) : IRequest<PollDto>;
+    public record GetByIdQuery(int Id) : IRequest<PollDto?>;
 }
