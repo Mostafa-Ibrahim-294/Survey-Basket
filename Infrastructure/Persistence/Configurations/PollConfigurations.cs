@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations
 {
-    internal class PollConfiguration : IEntityTypeConfiguration<Poll>
+    internal class PollConfigurations : IEntityTypeConfiguration<Poll>
     {
         public void Configure(EntityTypeBuilder<Poll> builder)
         {

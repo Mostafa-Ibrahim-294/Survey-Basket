@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Common.Options;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,7 @@ namespace Application.Extensions
     {
         public static void AddApplicationServices(this WebApplicationBuilder builder)
         {
+
             builder.Services.AddAutoMapper(typeof(ApplicationService).Assembly);
             builder.Services.AddValidatorsFromAssembly(typeof(ApplicationService).Assembly)
                 .AddFluentValidationAutoValidation();

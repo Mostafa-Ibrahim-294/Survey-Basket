@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entites
 {
-    public class Poll
+    public class Poll : Auditable
     {
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
