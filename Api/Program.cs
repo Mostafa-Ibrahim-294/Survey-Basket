@@ -13,10 +13,7 @@ namespace Api
             // Add services to the container.
             builder.AddInfrastructureServices(builder.Configuration);
             builder.AddApplicationServices();
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            
            
             
             var app = builder.Build();
@@ -29,6 +26,8 @@ namespace Api
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors();
 
             app.UseAuthorization();
 

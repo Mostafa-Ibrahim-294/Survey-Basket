@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
 
-namespace Application.Features.Users.Commands
+namespace Application.Features.Users.Commands.Login
 {
     public class LoginCommandValidator : AbstractValidator<LoginCommand>
     {

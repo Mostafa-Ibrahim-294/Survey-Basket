@@ -14,6 +14,8 @@ namespace Application.Features.Users.Dtos
         public string LastName { get; set; } = string.Empty;
         public string Token { get; set; } = string.Empty;
         public int ExpiresIn { get; set; }
+        public string RefreshToken { get; set; } = string.Empty;
+        public DateTime RefreshTokenExpiresOn { get; set; }
 
     }
 }

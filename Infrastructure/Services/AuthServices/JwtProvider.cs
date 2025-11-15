@@ -5,11 +5,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Application.Common.Options;
+using Infrastructure.Common.Options;
 using Application.Contracts.Authentication;
 using Domain.Entites;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography;
 
 namespace Infrastructure.Services.AuthServices
 {
@@ -20,6 +21,14 @@ namespace Infrastructure.Services.AuthServices
         {
             _jwtOptions = jwtOptions;
         }
+
+        public (string token, DateTime expiresOn) GenerateRefreshToken()
+        {
+            var refreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+            var expiresOn = DateTime.UtcNow.AddDays(14);
+            return (refreshToken, expiresOn);
+        }
+
         public (string token, int expiresIn) GenerateToken(ApplicationUser applicationUser)
         {
             var claims = new Claim[]

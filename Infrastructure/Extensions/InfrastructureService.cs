@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Application.Common.Options;
+using Infrastructure.Common.Options;
 using Application.Contracts.Authentication;
 using Application.Contracts.Repositories;
 using Domain.Entites;
@@ -32,37 +32,12 @@ namespace Infrastructure.Extensions
                 .BindConfiguration(nameof(JwtOptions))
                 .ValidateDataAnnotations()
                 .ValidateOnStart();
-            var jwtSettings = builder.Configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>();
 
             builder.Services.AddScoped<IPollRepository, PollRepository>();
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>();
             builder.Services.AddSingleton<IJwtProvider, JwtProvider>();
-            builder.Services.AddAuthentication(
-                options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                }
-            ).AddJwtBearer(
-                options =>
-                {
-                    options.SaveToken = true;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(jwtSettings?.SecretKey!)
-                        ),
-                        ValidIssuer = jwtSettings?.Issuer,
-                        ValidAudience = jwtSettings?.Audience,
-                        ClockSkew = TimeSpan.Zero
-                    };
-                }
-            );
+            
         }
     }
 }

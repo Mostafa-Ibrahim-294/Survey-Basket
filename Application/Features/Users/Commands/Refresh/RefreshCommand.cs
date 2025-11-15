@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 using Application.Features.Users.Dtos;
 using MediatR;
 
-namespace Application.Features.Users.Commands
+namespace Application.Features.Users.Commands.Refresh
 {
-    public record LoginCommand(string Email, string Password) : IRequest<AuthResponse?>;
-
+    public record RefreshCommand(string RefreshToken) : IRequest<AuthResponse?>;
 }

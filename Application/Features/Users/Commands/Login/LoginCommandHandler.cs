@@ -9,7 +9,7 @@ using Domain.Entites;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Application.Features.Users.Commands
+namespace Application.Features.Users.Commands.Login
 {
     internal class LoginCommandHandler : IRequestHandler<LoginCommand , AuthResponse?>
     {
@@ -33,6 +33,7 @@ namespace Application.Features.Users.Commands
                 return null;
             }
             var (token, expiresIn) = _jwtProvider.GenerateToken(user);
+            var (refreshToken, refreshTokenExpiresOn) = _jwtProvider.GenerateRefreshToken();
             return new AuthResponse
             {
                 Id = user.Id,
@@ -40,7 +41,9 @@ namespace Application.Features.Users.Commands
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Token = token,
-                ExpiresIn = expiresIn
+                ExpiresIn = expiresIn , 
+                RefreshToken = refreshToken,
+                RefreshTokenExpiresOn = refreshTokenExpiresOn
             };
         }
     }

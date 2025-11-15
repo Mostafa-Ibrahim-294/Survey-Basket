@@ -10,5 +10,6 @@ namespace Application.Contracts.Authentication
     public interface IJwtProvider
     {
       public (string token , int expiresIn) GenerateToken(ApplicationUser applicationUser);
+      public (string token , DateTime expiresOn) GenerateRefreshToken();
     }
 }
