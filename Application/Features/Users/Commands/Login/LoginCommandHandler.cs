@@ -28,7 +28,7 @@ namespace Application.Features.Users.Commands.Login
                 return null;
             }
             var isPasswordValid = await _userManager.CheckPasswordAsync(user, request.Password);
-            if(!isPasswordValid)
+            if(!isPasswordValid && !user.EmailConfirmed)
             {
                 return null;
             }

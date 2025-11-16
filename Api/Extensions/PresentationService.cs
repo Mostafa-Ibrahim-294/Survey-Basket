@@ -2,6 +2,7 @@
 using Infrastructure.Common.Options;
 using Infrastructure.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Api.Extensions
@@ -50,6 +51,13 @@ namespace Api.Extensions
                         ValidAudience = jwtSettings?.Audience,
                     };
                 }
+            );
+            builder.Services.Configure<IdentityOptions>(
+                options =>
+                {
+                    options.SignIn.RequireConfirmedEmail = true;
+                    options.User.RequireUniqueEmail = true;
+                } 
             );
         }
     }

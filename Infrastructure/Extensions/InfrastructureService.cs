@@ -17,6 +17,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Infrastructure.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Infrastructure.Extensions
 {
@@ -35,9 +37,15 @@ namespace Infrastructure.Extensions
 
             builder.Services.AddScoped<IPollRepository, PollRepository>();
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<AppDbContext>();
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
             builder.Services.AddSingleton<IJwtProvider, JwtProvider>();
-            
+            builder.Services.AddOptions<MailOptions>()
+                .BindConfiguration(nameof(MailOptions))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
+
         }
     }
 }

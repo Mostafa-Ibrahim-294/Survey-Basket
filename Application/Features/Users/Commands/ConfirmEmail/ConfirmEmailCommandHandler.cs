@@ -1,0 +1,40 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Domain.Entites;
+using MediatR;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
+
+namespace Application.Features.Users.Commands.ConfirmEmail
+{
+    internal class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailCommand, bool>
+    {
+        private readonly UserManager<ApplicationUser> _userManager;
+        public ConfirmEmailCommandHandler(UserManager<ApplicationUser> userManager)
+        {
+            _userManager = userManager;
+        }
+        public async Task<bool> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
+        {
+            var user = await _userManager.FindByIdAsync(request.UserId);
+            if (user == null || user.EmailConfirmed)
+            {
+                return false;
+            }
+            var code = request.Code;
+            try
+            {
+                code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            }
+            catch
+            {
+                return false;
+            }
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+            return result.Succeeded;
+        }
+    }
+}
