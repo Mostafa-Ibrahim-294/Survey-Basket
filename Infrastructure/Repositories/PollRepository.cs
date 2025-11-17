@@ -50,5 +50,16 @@ namespace Infrastructure.Repositories
         {
             await _context.SaveChangesAsync(cancellationToken);
         }
+
+        public async Task<bool> IsTitleExist(string title, CancellationToken cancellationToken = default)
+        {
+            return await _context.Polls.AnyAsync(p => p.Title == title, cancellationToken);
+        }
+
+        public async Task<bool> IsTitleExistForOtherId(string title, int id, CancellationToken cancellationToken = default)
+        {
+            return await _context.Polls.AnyAsync(p => p.Title == title && p.Id != id, cancellationToken);
+        }
+
     }
 }

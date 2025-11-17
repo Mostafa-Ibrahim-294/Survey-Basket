@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using Application.Contracts.Authentication;
 using Application.Features.Users.Dtos;
 using Domain.Entites;
+using Domain.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using OneOf;
 
 namespace Application.Features.Users.Commands.Login
 {
-    internal class LoginCommandHandler : IRequestHandler<LoginCommand , AuthResponse?>
+    internal class LoginCommandHandler : IRequestHandler<LoginCommand, OneOf<AuthResponse, Error>>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IJwtProvider _jwtProvider;
@@ -20,17 +22,17 @@ namespace Application.Features.Users.Commands.Login
             _userManager = userManager;
             _jwtProvider = jwtProvider;
         }
-        public async Task<AuthResponse?> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<OneOf<AuthResponse , Error>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
             if(user == null)
             {
-                return null;
+                return UserErrors.InvalidCredentials;
             }
             var isPasswordValid = await _userManager.CheckPasswordAsync(user, request.Password);
             if(!isPasswordValid && !user.EmailConfirmed)
             {
-                return null;
+                return UserErrors.InvalidCredentials;
             }
             var (token, expiresIn) = _jwtProvider.GenerateToken(user);
             var (refreshToken, refreshTokenExpiresOn) = _jwtProvider.GenerateRefreshToken();

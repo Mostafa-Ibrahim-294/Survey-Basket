@@ -5,11 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Application.Contracts.Repositories;
 using AutoMapper;
+using Domain.Errors;
 using MediatR;
+using OneOf;
 
 namespace Application.Features.Polls.Commands.Update
 {
-    internal class UpdateCommandHandler : IRequestHandler<UpdateCommand, bool>
+    internal class UpdateCommandHandler : IRequestHandler<UpdateCommand, OneOf<bool, Error>>
     {
         private readonly IPollRepository _pollRepository;
         private readonly IMapper _mapper;
@@ -18,12 +20,17 @@ namespace Application.Features.Polls.Commands.Update
             _pollRepository = pollRepository;
             _mapper = mapper;
         }
-        public async Task<bool> Handle(UpdateCommand request, CancellationToken cancellationToken)
+        public async Task<OneOf<bool, Error>> Handle(UpdateCommand request, CancellationToken cancellationToken)
         {
             var poll = await _pollRepository.GetByIdAsync(request.id);
-            if (poll == null) return false;
+            if (poll == null) return PollErrors.NotFound;
+            var exists = await _pollRepository.IsTitleExistForOtherId(request.Title, request.id);
+            if (exists)
+            {
+                return PollErrors.DuplicateTitle;
+            }
             _mapper.Map(request, poll);
-           await _pollRepository.UpdateAsync(poll);
+            await _pollRepository.UpdateAsync(poll);
             return true;
         }
     }

@@ -22,36 +22,46 @@ namespace Api.Controllers
         public async Task<IActionResult> Login(LoginCommand loginCommand, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(loginCommand, cancellationToken);
-            if (result is null) return BadRequest("Invalid");
-            return Ok(result);
+            return result.Match<IActionResult>(
+                authResponse => Ok(authResponse),
+                error => StatusCode((int)error.StatusCode, error.Message)
+            );
         }
         [HttpPost("refresh")]
         public async Task<IActionResult> RefreshToken(RefreshCommand refreshTokenCommand, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(refreshTokenCommand, cancellationToken);
-            if (result is null) return BadRequest("Invalid");
-            return Ok(result);
+            return result.Match<IActionResult>(
+                authResponse => Ok(authResponse),
+                error => StatusCode((int)error.StatusCode, error.Message)
+            );
         }
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterCommand registerCommand, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(registerCommand, cancellationToken);
-            if (!result) return BadRequest();
-            return Ok();
+            return result.Match<IActionResult>(
+                success => Ok(),
+                error => StatusCode((int)error.StatusCode, error.Message)
+            );
         }
         [HttpPost("confirm-email")]
         public async Task<IActionResult> ConfirmEmail(ConfirmEmailCommand confirmEmailCommand, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(confirmEmailCommand, cancellationToken);
-            if (!result) return BadRequest("Invalid");
-            return Ok();
+            return result.Match<IActionResult>(
+                success => Ok(),
+                error => StatusCode((int)error.StatusCode, error.Message)
+            );
         }
         [HttpPost("resend-confirmation-email")]
         public async Task<IActionResult> ResendConfirmationEmail([FromQuery] ResendConfirmationEmailCommand resendConfirmationEmailCommand, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(resendConfirmationEmailCommand, cancellationToken);
-            if (!result) return BadRequest();
-            return Ok();
+            return result.Match<IActionResult>(
+                success => Ok(),
+                error => StatusCode((int)error.StatusCode, error.Message)
+            );
         }
 
     }

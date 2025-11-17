@@ -7,12 +7,14 @@ using Application.Contracts.Authentication;
 using Application.Contracts.Repositories;
 using Application.Features.Users.Dtos;
 using Domain.Entites;
+using Domain.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using OneOf;
 
 namespace Application.Features.Users.Commands.Refresh
 {
-    internal class RefreshCommandHandler : IRequestHandler<RefreshCommand, AuthResponse?>
+    internal class RefreshCommandHandler : IRequestHandler<RefreshCommand, OneOf<AuthResponse , Error>>
     {
         private readonly IRefreshTokenRepository _refreshTokenRepository;
         private readonly IJwtProvider _jwtProvider;
@@ -23,21 +25,17 @@ namespace Application.Features.Users.Commands.Refresh
             _jwtProvider = jwtProvider;
             _userManager = userManager;
         }
-        public async Task<AuthResponse?> Handle(RefreshCommand request, CancellationToken cancellationToken)
+        public async Task<OneOf<AuthResponse , Error>> Handle(RefreshCommand request, CancellationToken cancellationToken)
         {
             var refreshToken = await _refreshTokenRepository.GetRefreshTokenAsync(request.RefreshToken, cancellationToken);
-            if (refreshToken == null)
+            if (refreshToken == null || !refreshToken.IsActive)
             {
-                return null;
-            }
-            if(!refreshToken.IsActive)
-            {
-                return null;
+                return UserErrors.InvalidRefreshToken;
             }
             var user = await _userManager.FindByIdAsync(refreshToken.UserId);
             if (user == null)
             {
-                return null;
+                return UserErrors.UserNotFound;
             }
             refreshToken.RevokedOn = DateTime.UtcNow;
             var newJwtToken = _jwtProvider.GenerateToken(user);

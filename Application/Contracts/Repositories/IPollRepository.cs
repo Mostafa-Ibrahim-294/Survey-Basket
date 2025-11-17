@@ -12,6 +12,8 @@ namespace Application.Contracts.Repositories
         Task<Poll> CreateAsync(Poll poll, CancellationToken cancellationToken = default);
         Task UpdateAsync(Poll poll, CancellationToken cancellationToken = default);
         Task DeleteAsync(Poll poll, CancellationToken cancellationToken = default);
+        Task<bool> IsTitleExist(string title, CancellationToken cancellationToken = default);
+        Task<bool> IsTitleExistForOtherId(string title, int id, CancellationToken cancellationToken = default);
         Task SaveAsync(CancellationToken cancellationToken = default);
     }
 }

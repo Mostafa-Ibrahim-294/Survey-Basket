@@ -4,25 +4,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Domain.Entites;
+using Domain.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
+using OneOf;
 
 namespace Application.Features.Users.Commands.ConfirmEmail
 {
-    internal class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailCommand, bool>
+    internal class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailCommand, OneOf<bool, Error>>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         public ConfirmEmailCommandHandler(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }
-        public async Task<bool> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
+        public async Task<OneOf<bool, Error>> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByIdAsync(request.UserId);
-            if (user == null || user.EmailConfirmed)
+            if (user == null)
             {
-                return false;
+                return UserErrors.UserNotFound;
+            }
+            if (user.EmailConfirmed)
+            {
+                return UserErrors.EmailAlreadyConfirmed;
             }
             var code = request.Code;
             try

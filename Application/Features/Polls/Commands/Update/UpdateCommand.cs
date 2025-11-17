@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Errors;
 using MediatR;
+using OneOf;
 
 namespace Application.Features.Polls.Commands.Update
 {
-    public record UpdateCommand(int id , string Title, string Description) : IRequest<bool>;
+    public record UpdateCommand(int id, string Title, string Description) : IRequest<OneOf<bool, Error>>;
 }

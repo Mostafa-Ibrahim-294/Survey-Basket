@@ -33,31 +33,37 @@ namespace Api.Controllers
         public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(new GetByIdQuery(id), cancellationToken);
-            if (result is null) return NotFound();
-            return Ok(result);
+            return result.Match<IActionResult>(
+                poll => Ok(poll),
+                error => NotFound(error.Message)
+            );
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCommand createPollCommand , CancellationToken cancellationToken)
         {
             var created = await _mediator.Send(createPollCommand, cancellationToken);
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            return created.Match<IActionResult>(
+                poll => CreatedAtAction(nameof(GetById), new { id = poll.Id }, poll),
+                error => Conflict(error.Message)
+            );
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCommand updatePollCommand, CancellationToken cancellationToken)
         {
             updatePollCommand = updatePollCommand with { id = id };
             var updated = await _mediator.Send(updatePollCommand, cancellationToken);
-            if (!updated) return NotFound();
 
-            return NoContent();
+            
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken)
         {
             var deleted = await _mediator.Send(new DeleteCommand(id), cancellationToken);
-            if (!deleted) return NotFound();
-            return NoContent();
+            return deleted.Match<IActionResult>(
+                _ => NoContent(),
+                error => NotFound(error.Message)
+            );
         }
     }
 }

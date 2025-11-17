@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +8,7 @@ using Domain.Errors;
 using MediatR;
 using OneOf;
 
-namespace Application.Features.Users.Commands.Login
+namespace Application.Features.Users.Commands.Refresh
 {
-    public record LoginCommand(string Email, string Password) : IRequest<OneOf<AuthResponse, Error>>;
-
+    public record RefreshCommand(string RefreshToken) : IRequest<OneOf<AuthResponse, Error>>;
 }

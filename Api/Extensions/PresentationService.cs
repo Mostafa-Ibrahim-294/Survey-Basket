@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Api.Middlewares;
 using Infrastructure.Common.Options;
 using Infrastructure.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -14,6 +15,7 @@ namespace Api.Extensions
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
             var jwtSettings = builder.Configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>();
             builder.Services.AddCors(options =>
             {
