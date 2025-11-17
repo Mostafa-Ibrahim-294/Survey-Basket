@@ -35,7 +35,7 @@ namespace Api.Controllers
             var result = await _mediator.Send(new GetByIdQuery(id), cancellationToken);
             return result.Match<IActionResult>(
                 poll => Ok(poll),
-                error => NotFound(error.Message)
+                error => StatusCode((int)error.StatusCode , error.Message)
             );
         }
 
@@ -45,7 +45,7 @@ namespace Api.Controllers
             var created = await _mediator.Send(createPollCommand, cancellationToken);
             return created.Match<IActionResult>(
                 poll => CreatedAtAction(nameof(GetById), new { id = poll.Id }, poll),
-                error => Conflict(error.Message)
+                error => StatusCode((int)error.StatusCode , error.Message)
             );
         }
         [HttpPut("{id}")]
@@ -53,8 +53,10 @@ namespace Api.Controllers
         {
             updatePollCommand = updatePollCommand with { id = id };
             var updated = await _mediator.Send(updatePollCommand, cancellationToken);
-
-            
+            return updated.Match<IActionResult>(
+                _ => NoContent(),
+                error => StatusCode((int)error.StatusCode , error.Message)
+            );
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken)
@@ -62,7 +64,7 @@ namespace Api.Controllers
             var deleted = await _mediator.Send(new DeleteCommand(id), cancellationToken);
             return deleted.Match<IActionResult>(
                 _ => NoContent(),
-                error => NotFound(error.Message)
+                error => StatusCode((int)error.StatusCode , error.Message)
             );
         }
     }
