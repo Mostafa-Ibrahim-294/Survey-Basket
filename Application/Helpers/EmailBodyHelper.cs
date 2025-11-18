@@ -8,7 +8,7 @@ namespace Application.Helpers
 {
     public static class EmailBodyHelper
     {
-        public static string GenerateEmailConfirmationBody(string template, Dictionary<string, string> placeholders)
+        public static string GenerateEmailBody(string template, Dictionary<string, string> placeholders)
         {
             var basePath = AppContext.BaseDirectory;
             var filePath = Path.Combine(basePath, "Templates", $"{template}.html");

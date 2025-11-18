@@ -14,5 +14,6 @@ namespace Domain.Errors
         public static Error UserNotFound => new("User.NotFound", "The specified user was not found." , HttpStatusCode.NotFound);
         public static Error EmailAlreadyExists => new("User.EmailAlreadyExists", "The provided email is already associated with an existing account." , HttpStatusCode.Conflict);
         public static Error EmailAlreadyConfirmed => new("User.EmailAlreadyConfirmed", "The email address has already been confirmed." , HttpStatusCode.Conflict);
+        public static Error FailedChangePassword => new("User.FailedChangePassword", "Failed to change the password." , HttpStatusCode.BadRequest);
     }
 }

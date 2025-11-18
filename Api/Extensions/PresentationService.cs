@@ -15,7 +15,7 @@ namespace Api.Extensions
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+            builder.Services.AddExceptionHandler<GlobalExceptionHandler>().AddProblemDetails();
             var jwtSettings = builder.Configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>();
             builder.Services.AddCors(options =>
             {
@@ -54,6 +54,7 @@ namespace Api.Extensions
                     };
                 }
             );
+            builder.Services.AddAuthorization();
             builder.Services.Configure<IdentityOptions>(
                 options =>
                 {

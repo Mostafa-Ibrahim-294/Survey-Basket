@@ -36,7 +36,7 @@ namespace Application.Features.Users.Commands.Register
         {
             var isUniqueEmail = await _userManager.FindByEmailAsync(request.Email);
 
-            if (isUniqueEmail == null)
+            if (isUniqueEmail != null)
             {
                 return UserErrors.EmailAlreadyExists;
             }
@@ -46,10 +46,13 @@ namespace Application.Features.Users.Commands.Register
             {
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                // in production save front end url in appsettings
                 var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
-                var message = EmailBodyHelper.GenerateEmailConfirmationBody("EmailTemplate", new Dictionary<string, string>
+
+                var message = EmailBodyHelper.GenerateEmailBody("EmailTemplate", new Dictionary<string, string>
                 {
                     { "{{name}}", user.FirstName },
+                    // TODO: change the url according to front-end route
                     { "{{action_url}}", $"{origin}/identity/confirm-email?userId={user.Id}&code={code}" }
                 });
                 await _emailSender.SendEmailAsync(user.Email, "Confirm your email", message);

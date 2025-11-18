@@ -45,6 +45,8 @@ namespace Infrastructure.Extensions
                 .ValidateDataAnnotations()
                 .ValidateOnStart();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
+            builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            builder.Services.AddScoped<IUserContext , UserContext>();
 
         }
     }

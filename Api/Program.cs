@@ -1,4 +1,5 @@
 
+using Api.Extensions;
 using Application.Extensions;
 using Infrastructure.Extensions;
 
@@ -13,9 +14,10 @@ namespace Api
             // Add services to the container.
             builder.AddInfrastructureServices(builder.Configuration);
             builder.AddApplicationServices();
-            
-           
-            
+            builder.AddPresentationServices();
+
+
+
             var app = builder.Build();
             app.UseExceptionHandler();
             // Configure the HTTP request pipeline.
@@ -28,7 +30,7 @@ namespace Api
             app.UseHttpsRedirection();
 
             app.UseCors();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

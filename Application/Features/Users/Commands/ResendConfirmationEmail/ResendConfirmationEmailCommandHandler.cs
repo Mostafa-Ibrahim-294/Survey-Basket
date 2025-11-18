@@ -42,7 +42,7 @@ namespace Application.Features.Users.Commands.ResendConfirmationEmail
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
             var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
-            var message = EmailBodyHelper.GenerateEmailConfirmationBody("EmailTemplate", new Dictionary<string, string>
+            var message = EmailBodyHelper.GenerateEmailBody("EmailTemplate", new Dictionary<string, string>
                 {
                     { "{{name}}", user.FirstName },
                     { "{{action_url}}", $"{origin}/identity/confirm-email?userId={user.Id}&code={code}" }

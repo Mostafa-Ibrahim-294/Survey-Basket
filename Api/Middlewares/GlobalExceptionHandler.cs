@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Middlewares
 {
@@ -6,10 +7,14 @@ namespace Api.Middlewares
     {
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
-            // Here you can log the exception or modify the response as needed
+            var problemDetails = new ProblemDetails
+            {
+                Title = "An unexpected error occurred!",
+                Status = 500
+            };
             httpContext.Response.StatusCode = 500; // Internal Server Error
             httpContext.Response.ContentType = "application/json";
-            var result = System.Text.Json.JsonSerializer.Serialize(new { error = "An unexpected error occurred." });
+            var result = System.Text.Json.JsonSerializer.Serialize(problemDetails);
             await httpContext.Response.WriteAsync(result, cancellationToken);
             return true;
         }

@@ -1,0 +1,37 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+using Application.Contracts.Authentication;
+using Application.Features.Users.Dtos;
+using Domain.Errors;
+using Microsoft.AspNetCore.Http;
+using OneOf;
+
+namespace Infrastructure.Services.AuthServices
+{
+    public class UserContext : IUserContext
+    {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public UserContext(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
+        public CurrentUser? GetCurrentUser()
+        {
+            var user = _httpContextAccessor.HttpContext?.User;  
+            if (user == null || !user.Identity!.IsAuthenticated)
+            {
+                return null;
+            }
+            var id = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var email = user.FindFirst(c => c.Type == ClaimTypes.Email)?.Value;
+            return new CurrentUser(id!, email!);
+
+
+        }
+
+    }
+}
