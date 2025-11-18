@@ -19,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Infrastructure.Seeders;
 
 namespace Infrastructure.Extensions
 {
@@ -47,7 +48,7 @@ namespace Infrastructure.Extensions
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             builder.Services.AddScoped<IUserContext , UserContext>();
-
+            builder.Services.AddScoped<ISeeder, Seeder>();
         }
     }
 }

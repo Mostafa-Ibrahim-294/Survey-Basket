@@ -34,7 +34,8 @@ namespace Application.Features.Users.Commands.Login
             {
                 return UserErrors.InvalidCredentials;
             }
-            var (token, expiresIn) = _jwtProvider.GenerateToken(user);
+            var roles = await _userManager.GetRolesAsync(user);
+            var (token, expiresIn) = _jwtProvider.GenerateToken(user, roles);
             var (refreshToken, refreshTokenExpiresOn) = _jwtProvider.GenerateRefreshToken();
             user.RefreshTokens.Add(new RefreshToken
             {

@@ -9,5 +9,7 @@ namespace Infrastructure.Constants
     public static class ConfigurationConstants
     {
         public const string AllowedOrigins = "AllowedOrigins";
+        public const string DefaultAdmin = "DefaultAdmin";
+        public const string Password = "Password";
     }
 }

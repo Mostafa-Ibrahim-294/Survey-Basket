@@ -29,9 +29,9 @@ namespace Infrastructure.Services.AuthServices
             return (refreshToken, expiresOn);
         }
 
-        public (string token, int expiresIn) GenerateToken(ApplicationUser applicationUser)
+        public (string token, int expiresIn) GenerateToken(ApplicationUser applicationUser , IEnumerable<string> roles)
         {
-            var claims = new Claim[]
+            var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub , applicationUser.Id),
                 new Claim(JwtRegisteredClaimNames.GivenName , applicationUser.FirstName),
@@ -39,6 +39,7 @@ namespace Infrastructure.Services.AuthServices
                 new Claim(JwtRegisteredClaimNames.Email , applicationUser.Email),
                 new Claim(JwtRegisteredClaimNames.Jti , Guid.NewGuid().ToString()),
             };
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
             var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Value.SecretKey));
             var signingCredentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
             var expiresIn = _jwtOptions.Value.ExpiryMinutes;

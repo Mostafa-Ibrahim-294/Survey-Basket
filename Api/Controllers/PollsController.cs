@@ -6,13 +6,16 @@ using Application.Features.Polls.Commands.Update;
 using Application.Features.Polls.Dtos;
 using Application.Features.Polls.Queries.GetAll;
 using Application.Features.Polls.Queries.GetById;
+using Domain.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = Roles.Admin)]
     public class PollsController : ControllerBase
     {
         private readonly IMediator _mediator;

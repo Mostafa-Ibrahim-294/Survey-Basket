@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Constants;
 using Domain.Entites;
 using Domain.Errors;
 using MediatR;
@@ -40,6 +41,10 @@ namespace Application.Features.Users.Commands.ConfirmEmail
                 return false;
             }
             var result = await _userManager.ConfirmEmailAsync(user, code);
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, Roles.Member);
+            }
             return result.Succeeded;
         }
     }

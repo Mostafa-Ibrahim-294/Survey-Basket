@@ -38,7 +38,8 @@ namespace Application.Features.Users.Commands.Refresh
                 return UserErrors.UserNotFound;
             }
             refreshToken.RevokedOn = DateTime.UtcNow;
-            var newJwtToken = _jwtProvider.GenerateToken(user);
+            var roles = await _userManager.GetRolesAsync(user);
+            var newJwtToken = _jwtProvider.GenerateToken(user, roles);
             var newRefreshToken = _jwtProvider.GenerateRefreshToken();
             user.RefreshTokens.Add(new RefreshToken
             {
