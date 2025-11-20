@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Errors
 {
@@ -18,5 +14,10 @@ namespace Domain.Errors
         public static Error UserDisabled => new("User.Disabled", "The user account is disabled." , HttpStatusCode.Forbidden);
         public static Error NotConfirmedEmail => new("User.NotConfirmedEmail", "The user email is not confirmed." , HttpStatusCode.Forbidden);
         public static Error LockedUser => new("User.Locked", "The user account is locked due to multiple failed login attempts." , HttpStatusCode.Forbidden);
+        public static Error RoleNotFound => new("User.RoleNotFound", "One or more specified roles do not exist." , HttpStatusCode.BadRequest);
+        public static Error FailedToCreate => new("User.FailedToCreate", "Failed to create the user." , HttpStatusCode.BadRequest);
+        public static Error FailedToUpdate => new("User.FailedToUpdate", "Failed to update the user." , HttpStatusCode.BadRequest);
+        public static Error UserNotLocked => new("User.NotLocked", "The user is not locked." , HttpStatusCode.BadRequest);
+        public static Error FailedToUnlock => new("User.FailedToUnlock", "Failed to unlock the user." , HttpStatusCode.BadRequest);
     }
 }
