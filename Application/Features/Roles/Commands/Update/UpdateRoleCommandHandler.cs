@@ -13,16 +13,16 @@ using OneOf;
 
 namespace Application.Features.Roles.Commands.Update
 {
-    internal class UpdateCommandHandler : IRequestHandler<UpdateCommand, OneOf<RoleDto, Error>>
+    internal class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, OneOf<RoleDto, Error>>
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
-        public UpdateCommandHandler(RoleManager<IdentityRole> roleManager, IMapper mapper)
+        public UpdateRoleCommandHandler(RoleManager<IdentityRole> roleManager, IMapper mapper)
         {
             _roleManager = roleManager;
             _mapper = mapper;
         }
-        public async Task<OneOf<RoleDto, Error>> Handle(UpdateCommand request, CancellationToken cancellationToken)
+        public async Task<OneOf<RoleDto, Error>> Handle(UpdateRoleCommand request, CancellationToken cancellationToken)
         {
             var role = await _roleManager.FindByIdAsync(request.Id);
             if (role == null)

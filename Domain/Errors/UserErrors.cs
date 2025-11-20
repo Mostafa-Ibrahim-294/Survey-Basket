@@ -15,5 +15,8 @@ namespace Domain.Errors
         public static Error EmailAlreadyExists => new("User.EmailAlreadyExists", "The provided email is already associated with an existing account." , HttpStatusCode.Conflict);
         public static Error EmailAlreadyConfirmed => new("User.EmailAlreadyConfirmed", "The email address has already been confirmed." , HttpStatusCode.Conflict);
         public static Error FailedChangePassword => new("User.FailedChangePassword", "Failed to change the password." , HttpStatusCode.BadRequest);
+        public static Error UserDisabled => new("User.Disabled", "The user account is disabled." , HttpStatusCode.Forbidden);
+        public static Error NotConfirmedEmail => new("User.NotConfirmedEmail", "The user email is not confirmed." , HttpStatusCode.Forbidden);
+        public static Error LockedUser => new("User.Locked", "The user account is locked due to multiple failed login attempts." , HttpStatusCode.Forbidden);
     }
 }

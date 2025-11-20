@@ -10,5 +10,5 @@ using OneOf;
 
 namespace Application.Features.Roles.Commands.Create
 {
-    public record CreateCommand(string Name) : IRequest<OneOf<RoleDto, Error>>;
+    public record CreateRoleCommand(string Name) : IRequest<OneOf<RoleDto, Error>>;
 }

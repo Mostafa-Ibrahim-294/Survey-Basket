@@ -23,7 +23,6 @@ namespace Application.Features.Users.Commands.Register
         private readonly IMapper _mapper;
         private readonly IEmailSender _emailSender;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
         public RegisterCommandHandler(UserManager<ApplicationUser> userManager, IMapper mapper,
             IEmailSender emailSender , IHttpContextAccessor httpContextAccessor)
         {

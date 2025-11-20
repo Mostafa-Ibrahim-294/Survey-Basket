@@ -17,43 +17,58 @@ namespace Application.Features.Users.Commands.Login
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IJwtProvider _jwtProvider;
-        public LoginCommandHandler(UserManager<ApplicationUser> userManager, IJwtProvider jwtProvider)
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        public LoginCommandHandler(UserManager<ApplicationUser> userManager, IJwtProvider jwtProvider
+            , SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _jwtProvider = jwtProvider;
+            _signInManager = signInManager;
         }
         public async Task<OneOf<AuthResponse, Error>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null)
             {
-                return UserErrors.InvalidCredentials;
+                return UserErrors.UserNotFound;
             }
-            var isPasswordValid = await _userManager.CheckPasswordAsync(user, request.Password);
-            if (!isPasswordValid || !user.EmailConfirmed)
+            if (user.IsDisabled)
             {
-                return UserErrors.InvalidCredentials;
+                return UserErrors.UserDisabled;
             }
-            var roles = await _userManager.GetRolesAsync(user);
-            var (token, expiresIn) = _jwtProvider.GenerateToken(user, roles);
-            var (refreshToken, refreshTokenExpiresOn) = _jwtProvider.GenerateRefreshToken();
-            user.RefreshTokens.Add(new RefreshToken
+            var result = await _signInManager.PasswordSignInAsync(user, request.Password, false, true);
+            if (result.Succeeded)
             {
-                Token = refreshToken,
-                ExpiresOn = refreshTokenExpiresOn,
-            });
-            await _userManager.UpdateAsync(user);
-            return new AuthResponse
+                var roles = await _userManager.GetRolesAsync(user);
+                var (token, expiresIn) = _jwtProvider.GenerateToken(user, roles);
+                var (refreshToken, refreshTokenExpiresOn) = _jwtProvider.GenerateRefreshToken();
+                user.RefreshTokens.Add(new RefreshToken
+                {
+                    Token = refreshToken,
+                    ExpiresOn = refreshTokenExpiresOn,
+                });
+                await _userManager.UpdateAsync(user);
+                return new AuthResponse
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Token = token,
+                    ExpiresIn = expiresIn,
+                    RefreshToken = refreshToken,
+                    RefreshTokenExpiresOn = refreshTokenExpiresOn
+                };
+            }
+            if(result.IsLockedOut)
             {
-                Id = user.Id,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Token = token,
-                ExpiresIn = expiresIn , 
-                RefreshToken = refreshToken,
-                RefreshTokenExpiresOn = refreshTokenExpiresOn
-            };
+                return UserErrors.LockedUser;
+            }
+            if (result.IsNotAllowed)
+            {
+                return UserErrors.NotConfirmedEmail;
+            }
+            return UserErrors.InvalidCredentials;
         }
     }
 }

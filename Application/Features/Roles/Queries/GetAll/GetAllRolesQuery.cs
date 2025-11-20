@@ -8,5 +8,5 @@ using MediatR;
 
 namespace Application.Features.Roles.Queries.GetAll
 {
-    public record GetAllQuery : IRequest<IEnumerable<RoleDto>>;
+    public record GetAllRolesQuery : IRequest<IEnumerable<RoleDto>>;
 }

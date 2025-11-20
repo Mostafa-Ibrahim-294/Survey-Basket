@@ -37,6 +37,7 @@ namespace Infrastructure.Extensions
                 .ValidateOnStart();
 
             builder.Services.AddScoped<IPollRepository, PollRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>(); // register user repo
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();

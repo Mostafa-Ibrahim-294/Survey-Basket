@@ -11,16 +11,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.Roles.Queries.GetAll
 {
-    internal class GetAllQueryHandler : IRequestHandler<GetAllQuery, IEnumerable<RoleDto>>
+    internal class GetAllRolesQueryHandler : IRequestHandler<GetAllRolesQuery, IEnumerable<RoleDto>>
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
-        public GetAllQueryHandler(RoleManager<IdentityRole> roleManager, IMapper mapper)
+        public GetAllRolesQueryHandler(RoleManager<IdentityRole> roleManager, IMapper mapper)
         {
             _roleManager = roleManager;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<RoleDto>> Handle(GetAllQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RoleDto>> Handle(GetAllRolesQuery request, CancellationToken cancellationToken)
         {
             var roles = await _roleManager.Roles.ToListAsync(cancellationToken);
             var rolesDto = _mapper.Map<List<RoleDto>>(roles);

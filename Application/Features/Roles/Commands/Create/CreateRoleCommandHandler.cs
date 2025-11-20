@@ -12,16 +12,16 @@ using OneOf;
 
 namespace Application.Features.Roles.Commands.Create
 {
-    internal class CreateCommandHandler : IRequestHandler<CreateCommand, OneOf<RoleDto, Error>>
+    internal class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, OneOf<RoleDto, Error>>
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
-        public CreateCommandHandler(RoleManager<IdentityRole> roleManager, IMapper mapper)
+        public CreateRoleCommandHandler(RoleManager<IdentityRole> roleManager, IMapper mapper)
         {
             _roleManager = roleManager;
             _mapper = mapper;
         }
-        public async Task<OneOf<RoleDto, Error>> Handle(CreateCommand request, CancellationToken cancellationToken)
+        public async Task<OneOf<RoleDto, Error>> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
         {
             var roleExists = await _roleManager.RoleExistsAsync(request.Name);
             if (roleExists)

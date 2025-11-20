@@ -37,6 +37,10 @@ namespace Application.Features.Users.Commands.Refresh
             {
                 return UserErrors.UserNotFound;
             }
+            if (user.IsDisabled)
+            {
+                return UserErrors.UserDisabled;
+            }
             refreshToken.RevokedOn = DateTime.UtcNow;
             var roles = await _userManager.GetRolesAsync(user);
             var newJwtToken = _jwtProvider.GenerateToken(user, roles);

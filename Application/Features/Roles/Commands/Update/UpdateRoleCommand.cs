@@ -10,5 +10,5 @@ using OneOf;
 
 namespace Application.Features.Roles.Commands.Update
 {
-    public record UpdateCommand(string Id, string Name) : IRequest<OneOf<RoleDto, Error>>;
+    public record UpdateRoleCommand(string Id, string Name) : IRequest<OneOf<RoleDto, Error>>;
 }

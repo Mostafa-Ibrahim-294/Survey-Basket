@@ -10,7 +10,6 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using OneOf;
-
 namespace Application.Features.Users.Commands.ConfirmEmail
 {
     internal class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailCommand, OneOf<bool, Error>>
@@ -43,7 +42,7 @@ namespace Application.Features.Users.Commands.ConfirmEmail
             var result = await _userManager.ConfirmEmailAsync(user, code);
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, Roles.Member);
+                await _userManager.AddToRoleAsync(user, Domain.Constants.Roles.Member);
             }
             return result.Succeeded;
         }

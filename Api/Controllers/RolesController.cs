@@ -23,11 +23,11 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
-            var roles = await _mediator.Send(new GetAllQuery(), cancellationToken);
+            var roles = await _mediator.Send(new GetAllRolesQuery(), cancellationToken);
             return Ok(roles);
         }
         [HttpPost]
-        public async Task<IActionResult> Create(CreateCommand command, CancellationToken cancellationToken)
+        public async Task<IActionResult> Create(CreateRoleCommand command, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(command, cancellationToken);
             return result.Match<IActionResult>(
@@ -36,7 +36,7 @@ namespace Api.Controllers
             );
         }
         [HttpPut]
-        public async Task<IActionResult> Update([FromRoute] string Id, [FromBody] UpdateCommand command, CancellationToken cancellationToken)
+        public async Task<IActionResult> Update([FromRoute] string Id, [FromBody] UpdateRoleCommand command, CancellationToken cancellationToken)
         {
              command = command with { Id = Id };
             var result = await _mediator.Send(command, cancellationToken);

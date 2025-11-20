@@ -28,9 +28,8 @@ namespace Infrastructure.Services.AuthServices
             }
             var id = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             var email = user.FindFirst(c => c.Type == ClaimTypes.Email)?.Value;
-            return new CurrentUser(id!, email!);
-
-
+            var roles = user.FindAll(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+            return new CurrentUser(id!, email!, roles);
         }
 
     }

@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
 
-namespace Application.Features.Roles.Commands.Update
+namespace Application.Features.Roles.Commands.Create
 {
-    public class UpdateCommandValidator : AbstractValidator<UpdateCommand>
+    public class CreateRoleCommandValidator : AbstractValidator<CreateRoleCommand>
     {
-        public UpdateCommandValidator()
+        public CreateRoleCommandValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Role name is required.")
