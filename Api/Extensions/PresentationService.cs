@@ -5,6 +5,7 @@ using Infrastructure.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
 namespace Api.Extensions
 {
@@ -16,6 +17,11 @@ namespace Api.Extensions
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddExceptionHandler<GlobalExceptionHandler>().AddProblemDetails();
+            builder.Host.UseSerilog(
+                (context, services, configuration) =>
+                configuration.ReadFrom.Configuration(context.Configuration)
+                    .ReadFrom.Services(services)
+            );
             var jwtSettings = builder.Configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>();
             builder.Services.AddCors(options =>
             {

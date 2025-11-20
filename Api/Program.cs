@@ -3,6 +3,7 @@ using Api.Extensions;
 using Application.Extensions;
 using Infrastructure.Extensions;
 using Infrastructure.Seeders;
+using Serilog;
 
 namespace Api
 {
@@ -33,6 +34,8 @@ namespace Api
                 var seeder = services.GetRequiredService<ISeeder>();
                 await seeder.SeedAsync();
             }
+
+            app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
 
