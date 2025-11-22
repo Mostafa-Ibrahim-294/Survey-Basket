@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Application.Helpers;
 using Domain.Entites;
+using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -40,7 +41,7 @@ namespace Application.Features.Users.Commands.ForgetPassword
                     { "{{name}}", user.FirstName },
                     { "{{action_url}}", $"{origin}/identity/forget-password?email={user.Email}&token={token}" }
                 });
-            await _emailService.SendEmailAsync(user.Email, "Forget Password", message);
+            BackgroundJob.Enqueue(() => _emailService.SendEmailAsync(user.Email, "Forget Password", message));
         }
     }
 }

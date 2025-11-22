@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Application.Helpers;
 using Domain.Entites;
 using Domain.Errors;
+using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -47,7 +48,7 @@ namespace Application.Features.Users.Commands.ResendConfirmationEmail
                     { "{{name}}", user.FirstName },
                     { "{{action_url}}", $"{origin}/identity/confirm-email?userId={user.Id}&code={code}" }
                 });
-            await _emailSender.SendEmailAsync(user.Email, "Confirm your email", message);
+            BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(user.Email, "Confirm your email", message));
             return true;
         }
     }

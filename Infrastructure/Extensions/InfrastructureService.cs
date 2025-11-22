@@ -20,6 +20,8 @@ using Microsoft.IdentityModel.Tokens;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Infrastructure.Seeders;
+using Hangfire;
+using Infrastructure.Health;
 
 namespace Infrastructure.Extensions
 {
@@ -35,6 +37,20 @@ namespace Infrastructure.Extensions
                 .BindConfiguration(nameof(JwtOptions))
                 .ValidateDataAnnotations()
                 .ValidateOnStart();
+            builder.Services.AddHangfire(config =>
+                config.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(configuration.GetConnectionString("HangfireConnection"))
+            );
+            builder.Services.AddHangfireServer();
+            builder.Services.AddHealthChecks()
+                .AddSqlServer(configuration.GetConnectionString("DefaultConnection")!)
+                .AddHangfire(options =>
+                {
+                    options.MinimumAvailableServers = 1;
+                })
+                .AddCheck<MailHealthCheck>("mail service");
 
             builder.Services.AddScoped<IPollRepository, PollRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>(); // register user repo

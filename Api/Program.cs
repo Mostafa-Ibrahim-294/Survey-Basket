@@ -1,6 +1,7 @@
 
 using Api.Extensions;
 using Application.Extensions;
+using Hangfire;
 using Infrastructure.Extensions;
 using Infrastructure.Seeders;
 using Serilog;
@@ -27,6 +28,7 @@ namespace Api
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                app.UseHangfireDashboard();
             }
             using (var scope = app.Services.CreateScope())
             {
@@ -40,6 +42,7 @@ namespace Api
             app.UseHttpsRedirection();
 
             app.UseCors();
+            app.MapHealthChecks("/health");
             app.UseAuthentication();
             app.UseAuthorization();
 

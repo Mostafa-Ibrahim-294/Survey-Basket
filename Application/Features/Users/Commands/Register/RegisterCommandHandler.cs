@@ -7,6 +7,7 @@ using Application.Helpers;
 using AutoMapper;
 using Domain.Entites;
 using Domain.Errors;
+using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -54,7 +55,7 @@ namespace Application.Features.Users.Commands.Register
                     // TODO: change the url according to front-end route
                     { "{{action_url}}", $"{origin}/identity/confirm-email?userId={user.Id}&code={code}" }
                 });
-                await _emailSender.SendEmailAsync(user.Email, "Confirm your email", message);
+                BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(user.Email, "Confirm your email", message));
                 return result.Succeeded;
 
             }
