@@ -33,6 +33,7 @@ namespace Infrastructure.Extensions
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
+            builder.Services.AddHybridCache();
             builder.Services.AddOptions<JwtOptions>()
                 .BindConfiguration(nameof(JwtOptions))
                 .ValidateDataAnnotations()
@@ -51,7 +52,6 @@ namespace Infrastructure.Extensions
                     options.MinimumAvailableServers = 1;
                 })
                 .AddCheck<MailHealthCheck>("mail service");
-
             builder.Services.AddScoped<IPollRepository, PollRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>(); // register user repo
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Constants;
 using Application.Contracts.Repositories;
 using AutoMapper;
 using Domain.Errors;
 using MediatR;
+using Microsoft.Extensions.Caching.Hybrid;
 using OneOf;
 
 namespace Application.Features.Polls.Commands.Update
@@ -15,10 +17,12 @@ namespace Application.Features.Polls.Commands.Update
     {
         private readonly IPollRepository _pollRepository;
         private readonly IMapper _mapper;
-        public UpdateCommandHandler(IPollRepository pollRepository, IMapper mapper)
+        private readonly HybridCache _hybridCache;
+        public UpdateCommandHandler(IPollRepository pollRepository, IMapper mapper, HybridCache hybridCache)
         {
             _pollRepository = pollRepository;
             _mapper = mapper;
+            _hybridCache = hybridCache;
         }
         public async Task<OneOf<bool, Error>> Handle(UpdateCommand request, CancellationToken cancellationToken)
         {
@@ -31,6 +35,7 @@ namespace Application.Features.Polls.Commands.Update
             }
             _mapper.Map(request, poll);
             await _pollRepository.UpdateAsync(poll);
+            await _hybridCache.RemoveAsync(CacheConstants.AllPolls , cancellationToken);
             return true;
         }
     }

@@ -16,6 +16,8 @@ namespace Infrastructure.Persistence
         private readonly IHttpContextAccessor _httpContextAccessor;
         internal DbSet<Poll> Polls { get; set; }
         internal DbSet<RefreshToken> RefreshTokens { get; set; }
+        internal DbSet<Question> Questions { get; set; }
+        internal DbSet<Answer> Answers { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
         {
             _httpContextAccessor = httpContextAccessor;
