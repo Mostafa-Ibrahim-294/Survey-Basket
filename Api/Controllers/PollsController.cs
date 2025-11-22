@@ -7,15 +7,18 @@ using Application.Features.Polls.Dtos;
 using Application.Features.Polls.Queries.GetAll;
 using Application.Features.Polls.Queries.GetById;
 using Domain.Constants;
+using Infrastructure.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = Roles.Admin)]
+    [EnableRateLimiting(ServiceConstants.ConcurrentLimiterPolicy)]
     public class PollsController : ControllerBase
     {
         private readonly IMediator _mediator;

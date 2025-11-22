@@ -36,17 +36,15 @@ namespace Api
                 var seeder = services.GetRequiredService<ISeeder>();
                 await seeder.SeedAsync();
             }
-
             app.UseSerilogRequestLogging();
-
             app.UseHttpsRedirection();
+
 
             app.UseCors();
             app.MapHealthChecks("/health");
+            app.UseRateLimiter();
             app.UseAuthentication();
             app.UseAuthorization();
-
-
             app.MapControllers();
 
             app.Run();

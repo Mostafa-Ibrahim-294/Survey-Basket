@@ -1,9 +1,11 @@
 ﻿using System.Text;
+using System.Threading.RateLimiting;
 using Api.Middlewares;
 using Infrastructure.Common.Options;
 using Infrastructure.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
@@ -36,6 +38,31 @@ namespace Api.Extensions
                     }
                 );
             });
+            builder.Services.AddRateLimiter(
+                options =>
+                {
+                    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+                    options.AddPolicy(
+                        ServiceConstants.UserLimiterPolicy,
+                        context => RateLimitPartition.GetFixedWindowLimiter(
+                            partitionKey: context.User.Identity?.Name ?? context.Connection.RemoteIpAddress?.ToString() ?? "anonymous",
+                            factory: partition => new FixedWindowRateLimiterOptions
+                            {
+                                PermitLimit = 100,
+                                Window = TimeSpan.FromMinutes(1),
+                                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                                QueueLimit = 5
+                            }
+                        )
+                    );
+                    options.AddConcurrencyLimiter(ServiceConstants.ConcurrentLimiterPolicy, limiterOptions =>
+                    {
+                        limiterOptions.PermitLimit = 10000;
+                        limiterOptions.QueueLimit = 50;
+                        limiterOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+                    });
+                }
+            );
             builder.Services.AddAuthentication(
                 options =>
                 {
