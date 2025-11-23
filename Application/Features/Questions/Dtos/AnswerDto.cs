@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Questions.Dtos
 {
-    public class QuestionDto
+    public class AnswerDto
     {
         public int Id { get; set; }
         public string Content { get; set; } = string.Empty;
-        public IEnumerable<AnswerDto> Answers { get; set; } = Enumerable.Empty<AnswerDto>();
     }
 }

@@ -54,6 +54,7 @@ namespace Infrastructure.Extensions
                 .AddCheck<MailHealthCheck>("mail service");
             builder.Services.AddScoped<IPollRepository, PollRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>(); // register user repo
+            builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();

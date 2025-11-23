@@ -17,11 +17,14 @@ namespace Application.Features.Questions.Commands.CreateQuestion
                 .Length(3, 100);
 
            RuleFor(x => x.Answers)
+               .Cascade(CascadeMode.Stop)
                .NotEmpty()
                .WithMessage("At least one answer is required.")
                .Must(x => x.Count() >= 1)
                .WithMessage("At least one answer is required.");
            RuleFor(x => x.Answers)
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty()
                .Must(answers => answers.Distinct(StringComparer.OrdinalIgnoreCase).Count() == answers.Count())
                .WithMessage("Answers must be unique.");
         }

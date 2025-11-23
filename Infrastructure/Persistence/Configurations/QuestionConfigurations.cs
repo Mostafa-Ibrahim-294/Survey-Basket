@@ -20,8 +20,8 @@ namespace Infrastructure.Persistence.Configurations
                 .HasForeignKey(q => q.PollId)
                 .OnDelete(DeleteBehavior.Restrict);
             builder.HasOne(q => q.CreatedBy)
-                .WithOne()
-                .HasForeignKey<Question>(q => q.CreatedById)
+                .WithMany()
+                .HasForeignKey(x => x.CreatedById)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

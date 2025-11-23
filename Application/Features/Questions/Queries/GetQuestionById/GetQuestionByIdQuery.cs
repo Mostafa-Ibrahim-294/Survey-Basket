@@ -8,7 +8,7 @@ using Domain.Errors;
 using MediatR;
 using OneOf;
 
-namespace Application.Features.Questions.Commands.CreateQuestion
+namespace Application.Features.Questions.Queries.GetQuestionById
 {
-    public record CreateQuestionCommand(string Content , int PollId , IEnumerable<string> Answers) : IRequest<OneOf<QuestionDto,Error>>;
+    public record GetQuestionByIdQuery(int PollId, int Id) : IRequest<OneOf<QuestionDto, Error>>;
 }
