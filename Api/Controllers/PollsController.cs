@@ -6,6 +6,7 @@ using Application.Features.Polls.Commands.Update;
 using Application.Features.Polls.Dtos;
 using Application.Features.Polls.Queries.GetAll;
 using Application.Features.Polls.Queries.GetById;
+using Application.Features.Polls.Queries.GetCurrent;
 using Domain.Constants;
 using Infrastructure.Constants;
 using MediatR;
@@ -18,7 +19,6 @@ namespace Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = Roles.Admin)]
-    [EnableRateLimiting(ServiceConstants.ConcurrentLimiterPolicy)]
     public class PollsController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -43,6 +43,12 @@ namespace Api.Controllers
                 poll => Ok(poll),
                 error => StatusCode((int)error.StatusCode , error.Message)
             );
+        }
+        [HttpGet("current")]
+        public async Task<IActionResult> GetCurrent(CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(new GetCurrentQuery(), cancellationToken);
+            return Ok(result);
         }
 
         [HttpPost]

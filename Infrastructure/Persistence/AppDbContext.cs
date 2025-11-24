@@ -18,6 +18,8 @@ namespace Infrastructure.Persistence
         internal DbSet<RefreshToken> RefreshTokens { get; set; }
         internal DbSet<Question> Questions { get; set; }
         internal DbSet<Answer> Answers { get; set; }
+        internal DbSet<Vote> Votes { get; set; }
+        internal DbSet<VoteAnswer> VoteAnswers { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
         {
             _httpContextAccessor = httpContextAccessor;

@@ -61,5 +61,19 @@ namespace Infrastructure.Repositories
             return await _context.Polls.AnyAsync(p => p.Title == title && p.Id != id, cancellationToken);
         }
 
+        public async Task<IEnumerable<Poll>> GetCurrentPolls(CancellationToken cancellationToken = default)
+        {
+            return await _context.Polls
+                .Where(p => p.IsPublished && p.EndsAt >= DateOnly.FromDateTime(DateTime.UtcNow)
+                && p.StartsAt <= DateOnly.FromDateTime(DateTime.UtcNow)
+                ).AsNoTracking()
+                .ToListAsync(cancellationToken);
+        }
+
+        public Task<bool> IsCurrentPoll(int id, CancellationToken cancellationToken = default)
+        {
+            return _context.Polls.AnyAsync(p => p.Id == id && p.IsPublished && p.EndsAt >= DateOnly.FromDateTime(DateTime.UtcNow)
+                && p.StartsAt <= DateOnly.FromDateTime(DateTime.UtcNow), cancellationToken);
+        }
     }
 }

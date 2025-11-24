@@ -2,6 +2,7 @@
 using Application.Features.Questions.Commands.ToggleQuestion;
 using Application.Features.Questions.Queries.GetAllQuestions;
 using Application.Features.Questions.Queries.GetQuestionById;
+using Domain.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -11,7 +12,7 @@ namespace Api.Controllers
 {
     [Route("api/polls/{pollId}/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = Roles.Admin)]
     public class QuestionsController : ControllerBase
     {
         private readonly IMediator _mediator;

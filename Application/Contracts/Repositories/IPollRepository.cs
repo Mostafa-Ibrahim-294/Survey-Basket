@@ -9,6 +9,8 @@ namespace Application.Contracts.Repositories
     {
         Task<IEnumerable<Poll>> GetAllAsync(CancellationToken cancellationToken = default);
         Task<Poll?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Poll>> GetCurrentPolls(CancellationToken cancellationToken = default);
+        Task<bool> IsCurrentPoll(int id, CancellationToken cancellationToken = default);
         Task<Poll> CreateAsync(Poll poll, CancellationToken cancellationToken = default);
         Task UpdateAsync(Poll poll, CancellationToken cancellationToken = default);
         Task DeleteAsync(Poll poll, CancellationToken cancellationToken = default);

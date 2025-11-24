@@ -63,5 +63,15 @@ namespace Infrastructure.Repositories
         {
             await _context.SaveChangesAsync(cancellationToken);
         }
+
+        public async Task<IEnumerable<QuestionDto>> GetAvailableAsync(int pollId, CancellationToken cancellationToken = default)
+        {
+            return await _context.Questions
+                .Where(q => q.PollId == pollId && q.IsActive)
+                .Include(q => q.Answers.Where(a => a.IsActive))
+                .ProjectTo<QuestionDto>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
+        }
     }
 }

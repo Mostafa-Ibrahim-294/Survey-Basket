@@ -10,6 +10,7 @@ namespace Application.Contracts.Repositories
     {
         Task<IEnumerable<QuestionDto>> GetAllByPollAsync(int pollId, CancellationToken cancellationToken = default);
         Task<Question?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<QuestionDto>> GetAvailableAsync(int pollId, CancellationToken cancellationToken = default);
         Task<Question> CreateAsync(Question question, CancellationToken cancellationToken = default);
         Task UpdateAsync(Question question, CancellationToken cancellationToken = default);
         Task<bool> IsContentExistInPollAsync(int pollId, string content, CancellationToken cancellationToken = default);
