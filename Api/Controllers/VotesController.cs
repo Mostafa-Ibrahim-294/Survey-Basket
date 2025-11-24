@@ -1,5 +1,6 @@
 ﻿using Application.Features.Questions.Queries.GetAvailableQuestions;
 using Application.Features.Votes.Commands.SaveVote;
+using Application.Features.Votes.Queries.GetVotesByPoll;
 using Domain.Constants;
 using Infrastructure.Constants;
 using MediatR;
@@ -22,7 +23,7 @@ namespace Api.Controllers
             _mediator = mediator;
         }
         [HttpGet]
-        public async Task<IActionResult> Start([FromRoute]int pollId, CancellationToken cancellationToken)
+        public async Task<IActionResult> Start([FromRoute] int pollId, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(new GetAvailableQuestionsQuery(pollId), cancellationToken);
             return result.Match<IActionResult>(
@@ -34,8 +35,14 @@ namespace Api.Controllers
         public async Task<IActionResult> Vote([FromRoute] int pollId, [FromBody] SaveVoteCommand command, CancellationToken cancellationToken)
         {
             command = command with { PollId = pollId };
-             await _mediator.Send(command, cancellationToken);
+            await _mediator.Send(command, cancellationToken);
             return Created();
+        }
+        [HttpGet("results")]
+        public async Task<IActionResult> Results([FromRoute] int pollId, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(new GetVotesByPollQuery(pollId), cancellationToken);
+            return Ok(result);
         }
     }
 }

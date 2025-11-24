@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Contracts.Repositories;
+using Application.Features.Votes.Dtos;
+using AutoMapper;
 using Domain.Entites;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -13,9 +15,11 @@ namespace Infrastructure.Repositories
     internal class VoteRepository : IVoteRepository
     {
         private readonly AppDbContext _context;
-        public VoteRepository(AppDbContext context)
+        private readonly IMapper _mapper;
+        public VoteRepository(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         public async Task AddVoteAsync(Vote vote, CancellationToken cancellationToken = default)
         {
@@ -23,9 +27,17 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public Task<int> GetVoteCountByAnswerIdAsync(int answerId, CancellationToken cancellationToken = default)
+        public async Task<PollVoteDto> GetVotesByPollIdAsync(int pollId, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var poll = await _context.Polls
+                .Include(p => p.Votes)
+                .FirstOrDefaultAsync(p => p.Id == pollId, cancellationToken);
+            if (poll == null)
+            {
+                return null!;
+            }
+            return _mapper.Map<PollVoteDto>(poll);
+
         }
 
         public async Task<bool> HasUserVotedAsync(string userId, int pollId, CancellationToken cancellationToken = default)

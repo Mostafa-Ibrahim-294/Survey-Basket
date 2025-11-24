@@ -18,7 +18,7 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   // [Authorize(Roles = Roles.Admin)]
+    [Authorize(Roles = Roles.Admin)]
     public class PollsController : ControllerBase
     {
         private readonly IMediator _mediator;

@@ -33,6 +33,12 @@ namespace Infrastructure.Extensions
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
+            builder.Services.AddStackExchangeRedisCache(
+                options =>
+                {
+                    options.Configuration = configuration.GetConnectionString("RedisConnection");
+                }
+            );
             builder.Services.AddHybridCache();
             builder.Services.AddOptions<JwtOptions>()
                 .BindConfiguration(nameof(JwtOptions))
@@ -51,6 +57,7 @@ namespace Infrastructure.Extensions
                 {
                     options.MinimumAvailableServers = 1;
                 })
+                .AddRedis(configuration.GetConnectionString("RedisConnection")!)
                 .AddCheck<MailHealthCheck>("mail service");
             builder.Services.AddScoped<IPollRepository, PollRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>(); // register user repo
