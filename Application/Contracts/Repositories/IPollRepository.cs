@@ -1,13 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common;
+using Application.Features.Polls.Dtos;
 using Domain.Entites;
 
 namespace Application.Contracts.Repositories
 {
     public interface IPollRepository
     {
-        Task<IEnumerable<Poll>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<PageResult<PollDto>> GetAllAsync(int pageNumber , int pageSize, string? search = null,
+            string ? sortBy = null , SortDirection sortDirection = SortDirection.Ascending,
+            CancellationToken cancellationToken = default);
         Task<Poll?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
         Task<IEnumerable<Poll>> GetCurrentPolls(CancellationToken cancellationToken = default);
         Task<bool> IsCurrentPoll(int id, CancellationToken cancellationToken = default);

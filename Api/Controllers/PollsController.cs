@@ -18,7 +18,7 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = Roles.Admin)]
+   // [Authorize(Roles = Roles.Admin)]
     public class PollsController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -29,9 +29,9 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll([FromQuery] GetAllQuery getAllQuery, CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(new GetAllQuery(), cancellationToken);
+            var result = await _mediator.Send(getAllQuery, cancellationToken);
             return Ok(result);
         }
 
