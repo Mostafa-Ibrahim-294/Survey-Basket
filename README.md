@@ -1,6 +1,6 @@
 # Survey-Basket
 
-A fully functional Survey Basket REST API scaffold built with ASP.NET Core, featuring clean architecture (Api, Application, Domain, Infrastructure).Uses Entity Framework Core for persistence, and secures endpoints with JWT-based authentication. It includes production-focused tooling such as Serilog request logging, health checks, rate limiting, CORS, Hangfire background jobs, and seeders to populate initial data. Swagger/OpenAPI documentation and Api.http samples are provided to speed up development and integration with front-end applications.
+A fully functional Survey Basket REST API scaffold built with ASP.NET Core, featuring clean architecture (Api, Application, Domain, Infrastructure).Uses Entity Framework Core for persistence, and secures endpoints with JWT-based authentication. It includes production-focused tooling such as Serilog request logging, health checks, rate limiting, CORS, Hangfire background jobs, and seeders to populate initial data. Swagger/OpenAPI documentation and Api.http samples are provided to speed up development and integration with clients.
 
 ---
 
@@ -21,8 +21,8 @@ Survey-Basket/
 │   ├── Extensions/          # Service registration, swagger, auth extensions
 │   ├── Middlewares/         # Custom middleware components
 │   └── Properties/
-├── Application/             # Application layer: services, DTOs, interfaces, use-cases
-├── Domain/                  # Domain models, entities, enums, value objects
+├── Application/             # Application layer: contracts, DTOs, interfaces, use-cases
+├── Domain/                  # Domain models, entities, errors
 ├── Infrastructure/          # EF Core DbContext, repositories, Migrations, data access
 └── README.md
 ```
