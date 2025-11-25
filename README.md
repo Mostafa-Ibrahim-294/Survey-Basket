@@ -35,10 +35,9 @@ Survey-Basket/
 | Framework     | .Net 9                                      |
 | ORM           | EF Core                                     |
 | Security      | JWT (ASP.NET Identity)                      |
-| Token Store   | (Hybrid) Redis / In-memory cache            |
+| Cache   | (Hybrid) Redis / In-memory cache                  |
 | DB            | SQL Server                                  |
 | Testing       | Postman                                     |
-| Build Tool    | dotnet CLI                                  |
 | Docs          | Swagger / Swashbuckle                       |
 | Validation    | Data Annotations / FluentValidation         |
 
