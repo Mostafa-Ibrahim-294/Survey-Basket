@@ -40,14 +40,15 @@ Survey-Basket/
 | Testing       | Postman                                     |
 | Docs          | Swagger / Swashbuckle                       |
 | Validation    | Data Annotations / FluentValidation         |
-
+| Payment Gateway | Paymob                                    | 
 ---
 
 ## Database Design
 
 ### DB Schemas
 
-![WhatsApp Image 2025-11-25 at 04 10 17_dafc605a](https://github.com/user-attachments/assets/4bd180ff-21a9-4d74-979a-4f60b5867e52)
+
+[SurveyBasket Scheme.docx](https://github.com/user-attachments/files/23778605/SurveyBasket.Scheme.docx)
 
 ---
 
@@ -68,4 +69,5 @@ Survey-Basket/
 - **Rate Limiting** Request throttling middleware to protect endpoints, prevent abuse, and maintain service stability under load.
 - **Health Check** Health check endpoint that reports application and dependency status for monitoring and orchestration.
 - **Pagination** Apply pagination to handle very large result sets.
+- **Integration With Payment Gateway** Allowing users to pay for their subscription plan using paymob
 
