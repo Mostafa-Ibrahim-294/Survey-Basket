@@ -24,7 +24,6 @@ namespace Infrastructure.Persistence
         internal DbSet<PlanPricing> PlanPricings { get; set; }
         internal DbSet<PlanFeature> PlanFeatures { get; set; }
         internal DbSet<Subscription> Subscriptions { get; set; }
-        internal DbSet<Invoice> Invoices { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
         {
             _httpContextAccessor = httpContextAccessor;

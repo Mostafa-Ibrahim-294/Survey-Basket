@@ -1,12 +1,12 @@
 using System;
+using Application.Features.Plans.Dtos;
 
 namespace Application.Features.Subscriptions.Dtos
 {
     public class SubscriptionDto
     {
-        public PlanSummaryDto Plan { get; set; } = new();
         public string Id { get; set; } = string.Empty;
-        public string TenantId { get; set; } = string.Empty;
+        public string UserId { get; set; } = string.Empty;
         public string PlanId { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public string Currency { get; set; } = string.Empty;
@@ -20,5 +20,6 @@ namespace Application.Features.Subscriptions.Dtos
         public DateTime? EndDate { get; set; }
         public DateTime? CanceledAt { get; set; }
         public DateTime? RenewalDate { get; set; }
+        public PlanDto Plan { get; set; } = null!;
     }
 }

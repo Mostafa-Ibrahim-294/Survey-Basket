@@ -26,7 +26,8 @@ namespace Infrastructure.Repositories
 
         public async Task<Subscription?> GetActiveSubscriptionByUserId(string userId, CancellationToken cancellationToken = default)
         {
-            return await _context.Subscriptions
+            return await _context.Subscriptions.AsNoTracking()
+                .Include(x => x.Plan)
                 .Where(s => s.UserId == userId && s.Status == SubscriptionStatus.Active)
                 .FirstOrDefaultAsync(cancellationToken);
         }
