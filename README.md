@@ -48,7 +48,7 @@ Survey-Basket/
 ### DB Schemas
 
 
-[SurveyBasket Scheme.docx](https://github.com/user-attachments/files/23778605/SurveyBasket.Scheme.docx)
+![WhatsApp Image 2025-11-26 at 21 25 00_13697ee7](https://github.com/user-attachments/assets/ebc363b8-e45a-4f71-9d4f-2d933b713b34)
 
 ---
 
