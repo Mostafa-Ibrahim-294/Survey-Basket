@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -27,9 +28,11 @@ namespace Infrastructure.Services.AuthServices
                 return null;
             }
             var id = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var firstName = user.FindFirst(c => c.Type == ClaimTypes.GivenName)?.Value;
+            var lastName = user.FindFirst(c => c.Type == ClaimTypes.Surname)?.Value;
             var email = user.FindFirst(c => c.Type == ClaimTypes.Email)?.Value;
             var roles = user.FindAll(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
-            return new CurrentUser(id!, email!, roles);
+            return new CurrentUser(id!, email!, firstName!, lastName!, roles);
         }
 
     }

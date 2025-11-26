@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entites
 {
-    public class Question : Auditable
+    public sealed class Question : Auditable
     {
         public int Id { get; set; }
         public string Content { get; set; } = string.Empty; 

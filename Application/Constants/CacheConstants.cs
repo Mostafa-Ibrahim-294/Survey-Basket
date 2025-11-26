@@ -9,5 +9,6 @@ namespace Application.Constants
     public static class CacheConstants
     {
         public const string AllPolls = "polls_all";
+        public const string AllPlans = "plans_all";
     }
 }

@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Users.Dtos
 {
-    public record CurrentUser(string UserId,string Email , IEnumerable<string> Roles);
+    public record CurrentUser(string UserId,string Email, string FirstName, string LastName, IEnumerable<string> Roles);
 }

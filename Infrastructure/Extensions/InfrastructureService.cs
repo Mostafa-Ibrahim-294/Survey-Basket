@@ -3,25 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Infrastructure.Common.Options;
 using Application.Contracts.Authentication;
+using Application.Contracts.Payment;
 using Application.Contracts.Repositories;
 using Domain.Entites;
+using Hangfire;
+using Infrastructure.Common.Options;
+using Infrastructure.Health;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
+using Infrastructure.Seeders;
+using Infrastructure.Services;
 using Infrastructure.Services.AuthServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Infrastructure.Services;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Infrastructure.Seeders;
-using Hangfire;
-using Infrastructure.Health;
+using X.Paymob.CashIn;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace Infrastructure.Extensions
 {
@@ -71,10 +74,22 @@ namespace Infrastructure.Extensions
                 .BindConfiguration(nameof(MailOptions))
                 .ValidateDataAnnotations()
                 .ValidateOnStart();
+            builder.Services.AddOptions<PaymobOptions>()
+                .BindConfiguration(nameof(PaymobOptions))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             builder.Services.AddScoped<IUserContext , UserContext>();
             builder.Services.AddScoped<ISeeder, Seeder>();
+            builder.Services.AddScoped<IPlanRepository, PlanRepository>();
+            builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddPaymobCashIn(config =>
+            {
+                config.ApiKey = configuration.GetSection(nameof(PaymobOptions)).Get<PaymobOptions>()!.ApiKey;
+                config.Hmac = configuration.GetSection(nameof(PaymobOptions)).Get<PaymobOptions>()!.Hmac;
+            });
         }
     }
 }

@@ -20,6 +20,11 @@ namespace Infrastructure.Persistence
         internal DbSet<Answer> Answers { get; set; }
         internal DbSet<Vote> Votes { get; set; }
         internal DbSet<VoteAnswer> VoteAnswers { get; set; }
+        internal DbSet<Plan> Plans { get; set; }
+        internal DbSet<PlanPricing> PlanPricings { get; set; }
+        internal DbSet<PlanFeature> PlanFeatures { get; set; }
+        internal DbSet<Subscription> Subscriptions { get; set; }
+        internal DbSet<Invoice> Invoices { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
         {
             _httpContextAccessor = httpContextAccessor;
